@@ -172,19 +172,29 @@ $\forall x,y \in X \Rightarrow x,y \in C \Rightarrow x \preceq y \lor y \preceq 
 
 \begin{definizione} \summary{(Limite superiore/inferiore, sup/inf, lub/glb.)}
 Sia $(P, \preceq)$ un poset e sia $A \sseq P$.
+\begin{itemize}
+\item \emph{Limite superiore.} 
 Un elemento $p \in P$ \`e un \emph{limite superiore} per $A$
 se $a \preceq p$ per ogni $a\in A$.
-Un elemento $p \in P$ \`e un \emph{sup} (o \emph{lub}) di $A$,
+\item \emph{Sup/lub.} 
+Un elemento $p \in P$ \`e un \emph{sup} (o \emph{lub} - least upper bound) di $A$,
 scritto $p \in \sup A$ (o $p \in \lub A$),
 se $p$ \`e un limite superiore per $A$ e,
 per ogni altro limite superiore $p'$ per $A$,
 risulta $p \preceq p'$.
+\item \emph{Limite inferiore.}
 In modo del tutto analogo un elemento $p \in P$ \`e un \emph{limite inferiore}
 per $A$ se $p \preceq a$ per ogni $a \in A$.
-Un elemento $p \in P$ \`e un \emph{inf} (o \emph{glb}) di $A$,
+\item \emph{Inf/glb.}
+Un elemento $p \in P$ \`e un \emph{inf} (o \emph{glb} - greatest upper bound) di $A$,
 scritto $p \in \inf A$ (o $p \in \glb A$),
 se $p$ \`e un limite inferiore per $A$ e,
 per ogni altro limite inferiore $p'$ per $A$, risulta $p' \preceq p$.
+\end{itemize}
+
+
+
+
 \end{definizione}
 
 %%%%%%%%%%%%%%
