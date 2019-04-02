@@ -1,11 +1,1 @@
-Mancino: nozioni preliminari, continuità del comando while, esercizi logica
-         di Floyd-Hoare, esercizio 1 nel paragrafo "Relazione fra le sematiche",
-         semantica big step, semantica informale del linguaggio While
-Marano: esercizi CPO, Teorema di Tarski
-Segalini: semantica degli array, teorema conservazione passi small step in denotazionale,
-          normalizzazione big step, semantica delle eccezioni, if correttezza logica floyd hoare
-Trombi: interpretazione astratta, semantica del comando "repeat C until B"
-Lombardi: logica di specifica, definizione sintattica, variabili libere,
-          valutazione semantica di LExp, valutazione semantica di Pred,
-		  verità di una tripla di Floyd-Hoare, correttezza della logica di Floyd-Hoare,
-		  regole assiomatiche, regole derivate
+TBD
