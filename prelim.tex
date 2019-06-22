@@ -123,6 +123,8 @@ Se inoltre, per ogni $a, b \in S$, vale
 \item[$O_4:$] $(a \preceq b) \lor (b \preceq a)$,
 \end{itemize}
 allora $\preceq$ \`e detta \emph{relazione di ordinamento totale} su $S$.
+
+Questo ci dice che se una relazione di ordinamento è totale, tutti i suoi elementi sono confrontabili (quindi $\forall a,b \in S: (a \preceq b) \lor (b \preceq a)$), mentre per le relazioni di ordinamento parziale questo non vale: alcuni elementi possono essere non confrontabili.
 \end{definizione}
 
 \begin{definizione} \summary{(Insieme parzialmente/totalmente ordinato.)}
@@ -149,7 +151,7 @@ che $(A, \preceq)$ \`e una catena.
 
 \begin{proposizione}
 \label{prop:catena-finita-ha-elemento-massimo}
-Ogni catena finita ha un elemento massimo.
+\summary{(Ogni catena finita ha un elemento massimo.)}
 \end{proposizione}
 \begin{proof}
 Sia $(C, \preceq)$ una catena tale che $|C| < \aleph_0$.
@@ -199,6 +201,7 @@ per ogni altro limite inferiore $p'$ per $A$, risulta $p' \preceq p$.
 
 %%%%%%%%%%%%%%
 \begin{proposizione} \summary{(Unicità di $\lub$ e $\glb$.)}
+\label{prop:unicita_lub_glb}
 Sia $(S, \preceq)$ un poset e sia $T \subseteq S$.
 Se $u, v \in \lub T$ allora $u = v$.
 Analogamente, se $u, v \in \glb T$ allora $u = v$.
@@ -256,10 +259,71 @@ Un insieme parzialmente ordinato $L$ \`e un \emph{reticolo} se e solo se,
 per ogni $a, b \in L$, esistono in $L$ sia $\sup\{a,b\}$ che $\inf\{a,b\}$.
 \end{definizione}
 
-\begin{proposizione}
+\begin{proposizione} \summary{(Equivalenza delle definizioni \textup{\ref{def:reticolo1}} e \textup{\ref{def:reticolo2}} di reticolo.)}
 \textup{\cite{BurrisS81}} Le definizioni di reticolo
 delle definizioni~\textup{\ref{def:reticolo1}} e \textup{\ref{def:reticolo2}}
 sono equivalenti.
+
+Bisogna dimostrare la doppia implicazione: \textup{\ref{def:reticolo1}} $\Leftrightarrow$ \textup{\ref{def:reticolo2}}.
+\begin{itemize}
+\item[$\Leftarrow$)] Assumiamo che valga la definizione per ordinamento del reticolo e diamo un significato alla struttura algebrica, in particolare a $\oplus$ e $\otimes$.
+\begin{align*}
+    x \oplus y &= lub\{x,y\} \\
+    x \otimes y &= glb\{x,y\}
+\end{align*}
+Bisogna mostrare che $A = (S, \oplus, \otimes)$ è un reticolo e che per esso valgono le proprietà di idempotenza, commutatività, associatività ed assorbimento.
+\begin{itemize}
+\item \emph{Idempotenza.} $x \oplus x = lub\{x,x\}$, $x \otimes x = glb\{x,x\}$ sono banalmente vere.
+\item \emph{Commutativa.} $x \oplus y = lub\{x,y\} = lub\{y,x\} = y \oplus x$,
+è banalmente vera visto che $lub$ è un insieme. (Vale la duale per $\otimes$.)
+\item \emph{Associativa.} $x \oplus (y \oplus z) = lub\{x,lub\{y,z\}\} \Rightarrow (x \oplus y) \oplus z = lub\{lub\{x,y\}, z\}$.
+\begin{align*}
+    x \oplus (y \oplus z) &= lub\{x,lub\{y,z\}\} \\
+        &= lub\{x,a\} = v && \text{dove } a = lub\{y,z\} \\
+        &= lub\{b,z\} = w && \text{dove } b = lub\{x,y\} \\
+        &= lub\{lub\{x,y\}, z\} \\
+        &= (x \oplus y) \oplus z
+\end{align*}
+Per mostrare che $v$ e $w$ sono \emph{lub} e che $v=w$ serve un ulteriore 
+ragionamento. In particolare, per mostrare che sono \emph{lub}, dobbiamo 
+mostrarlo per ogni altro upperbound.
+
+Volendo mostrare che $v$ è veramente un \emph{lub}, prendiamo 
+$v'=ub\{x,y,z\}$. Sappiamo che $a \preceq v'$ (perché, a parole, se $v'$ è 
+upperbound di $x, y, z$ lo è sicuramente anche per $y, z$), quindi anche 
+$x \preceq v'$ (perché, a parole, se $v'$ è upperbound di $x, y, z$ lo è 
+sicuramente anche di $x$). Da ciò segue che $v \preceq v'$, essendo $v$ il 
+\emph{lub} di $x$ ed $a$.
+
+Vale il ragionamento analogo per $w$. Prendiamo $w'=ub\{x,y,z\}$. Sappiamo 
+quindi che $b \preceq w'$, e $z \preceq w'$, da cui segue che $w \preceq w'$ 
+in quanto $w$ è il \emph{lub} di $x, y, z$.
+
+Avendo già dimostrato l'unicità di \emph{lub} e \emph{glb} (\textup{\ref{prop:unicita_lub_glb}}), sappiamo che il \emph{lub} se esite è 
+unico, quindi $v = w$.
+
+Vale la duale per $\otimes$.
+\end{itemize}
+
+\item[$\Rightarrow$)] Assumiamo che valga la definizione algebrica del 
+reticolo e mostriamo che ci si può ricondurre alla definizione 
+dell'ordinamento.
+
+In particolare, da $\forall x,y \in S \itc x \preceq y \Rightarrow x \oplus y = y$ dobbiamo mostrare che per $(S, \preceq)$ valgono le proprietà riflessiva, antisimmetrica e transitiva. 
+\begin{itemize}
+\item \emph{Riflessiva.} $x \preceq x \Rightarrow x \oplus x = x$ vale per idempotenza di $\oplus$.
+\item \emph{Antisimmetrica.} $x \preceq y \land y \preceq x \Rightarrow x = y$ vale perché da $x \preceq y$ discende $x \oplus y = y$ e da $y \preceq x$ discende $y \oplus x = x$ da cui si ottiene
+\begin{align*}
+    y = (x \oplus y) = (y \oplus x) = x \Rightarrow x = y
+\end{align*}
+grazie alla proprietà commutativa di $\oplus$.
+\item \emph{Transitiva.} Da $x \preceq y \land y \preceq z \Rightarrow x \preceq z$ possiamo scrivere $(x \oplus y = y) \land (y \oplus z = z) \Rightarrow (x \oplus z = z)$.
+[E' ovvia guardando $oplus$ con gli occhi del lub, ma non saprei come scrivere la cosa]
+\end{itemize}
+\end{itemize}
+
+--- (fine) ---
+
 Inoltre, se $L$ \`e
 un reticolo per la prima definizione, la seconda definizione si ottiene
 ponendo, per ogni $a,b \in L$,
