@@ -418,3 +418,199 @@ con $I$ invariante.
   \endprooftree
 \]
 con $I$ invariante e $E$ variante.
+
+
+
+\section{Goto}
+
+Aggiungere al linguaggio WHILE il goto.
+
+\subsection{Sintassi}
+
+\begin{description}
+\item[Etichette] $l \in \Label \defeq \{ l_1, l_2, \ldots \}$
+\item[Comandi] $\Com \ni C ::= \goto{l} \vbar l: C \vbar \ldots$
+\end{description}
+
+\subsection{Semantica operazionale big-step}
+
+\begin{description}
+
+\item[Label]
+\begin{gather*}
+  \rulename{B-LABEL.FOUND}
+  \prooftree
+    \configG{C}{s}{exec} \Downarrow \config{s'}{f}
+    \justifies \configG{\lab{l}{C}}{s}{\goto{l}} \Downarrow \config{s'}{f}
+  \endprooftree
+  \\[2em]
+  \rulename{B-LAB.FLAG}
+  \prooftree
+    \configG{C}{s}{f} \Downarrow \config{s'}{f'}
+    \justifies \configG{\lab{l}{C}}{s}{f} \Downarrow \config{s'}{f'}
+    \using f \neq \goto{l}
+  \endprooftree
+\end{gather*}
+
+\item[Goto]
+\begin{gather*}
+  \rulename{B-GOTO.ENABLE}
+  \prooftree
+    \justifies \configG{\goto{l}}{s}{exec} \Downarrow \config{s'}{\goto{l}}
+  \endprooftree
+  \\[2em]
+  \rulename{B-GOTO.FLAG}
+  \prooftree
+    \justifies \configG{\goto{l}}{s}{f} \Downarrow \config{s'}{f}
+    \using f \neq exec
+  \endprooftree  
+\end{gather*}
+
+\item[Skip]
+\begin{gather*}
+  \rulename{B-SKIP-FLAG}  
+  \prooftree
+    \justifies
+      \configG{\kw{skip}}{s}{f} \Downarrow \config{s}{f}
+  \endprooftree
+\end{gather*}
+
+\item[Assegnamento]
+\begin{gather*}
+  \rulename{B-ASSIGN.EXEC}  
+  \prooftree
+    \config{E}{s} \Downarrow \config{n}{s'}
+    \justifies
+      \configG{x:=E}{s}{exec} \Downarrow \config{\assign{s'}{x}{n}}{exec}
+  \endprooftree
+  \\[2em]
+  \rulename{B-ASSIGN.FLAG}  
+  \prooftree
+    \justifies
+      \configG{x:=E}{s}{f} \Downarrow \config{s}{f}
+    \using f \neq exec
+  \endprooftree
+\end{gather*}
+
+\item[Composizione sequenziale]
+\begin{gather*}
+  \rulename{B-COMP-SEQ.FLAG}
+  \prooftree
+    \configG{C_1}{s}{f} \Downarrow \config{s'}{f'}
+      \quad 
+      \configG{C_2}{s'}{f'} \Downarrow \config{s''}{f''}
+    \justifies
+      \configG{\textrm{$C_1$; $C_2$}}{s}{f} \Downarrow \config{s''}{f''}
+  \endprooftree
+\end{gather*}
+
+\item[If-then-else]
+\begin{gather*}
+  \rulename{B-ITE.TRUE.EXEC}
+  \prooftree
+    \config{B}{s} \Downarrow \config{\textrm{tt}}{s'}
+      \quad 
+      \configG{C_1}{s'}{exec} \Downarrow \config{s''}{exec}
+    \justifies
+      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{exec} \Downarrow \config{s''}{exec}
+  \endprooftree
+  \\[2em]
+  \rulename{B-ITE.TRUE.FLAG}
+  \prooftree
+    \config{B}{s} \Downarrow \config{\textrm{tt}}{s'}
+      \quad 
+      T1
+      \quad
+      T2
+    \justifies
+      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{exec} \Downarrow \config{s'''}{f'}
+    \using f \neq exec
+  \endprooftree
+  \\
+  T1 = \configG{C_1}{s'}{exec} \Downarrow \config{s''}{f}\\
+  T2 = \configG{C_2}{s''}{f} \Downarrow \config{s'''}{f'}
+  \\[2em]
+  \rulename{B-ITE.FALSE.EXEC}
+  \prooftree
+    \config{B}{s} \Downarrow \config{\textrm{ff}}{s'}
+      \quad 
+      \configG{C_2}{s'}{exec} \Downarrow \config{s''}{f}
+    \justifies
+      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{exec} \Downarrow \config{s''}{f}
+  \endprooftree
+  \\[2em]
+  \rulename{B-ITE.FALSE.FLAG}
+  \prooftree
+      \configG{C_1}{s}{f} \Downarrow \config{s'}{exec}
+    \justifies
+      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{f} \Downarrow \config{s'}{exec}
+    \using f \neq exec
+  \endprooftree
+  \\[2em]
+  \rulename{B-ITE.FLAG}
+  \prooftree
+      \configG{C_1}{s}{f} \Downarrow \config{s'}{f'}
+      \quad
+      \configG{C_2}{s'}{f'} \Downarrow \config{s''}{f''}
+    \justifies
+      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{f} \Downarrow \config{s''}{f''}
+    \using f \neq exec \land f' \neq exec
+  \endprooftree
+\end{gather*}
+
+\item[While]
+\begin{gather*}
+  \rulename{B-WHILE.TRUE.EXEC}
+  \prooftree
+    \config{B}{s} \Downarrow \config{\textrm{tt}}{s'}
+      \quad T1
+      \quad T2
+    \justifies
+        \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{exec} \Downarrow \config{s'''}{f}
+  \endprooftree
+  \\
+  T1 = \configG{C}{s'}{exec} \Downarrow \config{s''}{exec} \\
+  T2 = \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s''}{exec} \Downarrow \config{s'''}{f}
+  \\[2em]
+  \rulename{B-WHILE.TRUE.FLAG}
+  \prooftree
+    \config{B}{s} \Downarrow \config{\textrm{tt}}{s'}
+      \quad \configG{C}{s'}{exec} \Downarrow \config{s''}{f}
+    \justifies
+      \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{exec} \Downarrow \config{s''}{f}
+    \using f \neq exec
+  \endprooftree
+  \\[2em]
+  \rulename{B-WHILE.FALSE.EXEC}
+  \prooftree
+    \config{B}{s} \Downarrow \config{\textrm{ff}}{s'}
+    \justifies
+      \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{exec} \Downarrow \config{s'}{exec}
+  \endprooftree
+  \\[2em]
+  \rulename{R1}
+  \prooftree
+    \configG{C}{s}{f} \Downarrow \config{s'}{f'}
+    \justifies
+    \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{f} \Downarrow \config{s'}{f'}
+    \using f \neq exec \land f' \neq exec
+  \endprooftree
+  \\[2em]
+  \rulename{R2}
+  \prooftree
+    \configG{C}{s}{f} \Downarrow \config{s'}{exec}
+      \quad \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s'}{exec} \Downarrow \config{s''}{f'}
+    \justifies
+      \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{f} \Downarrow \config{s''}{f'}
+    \using f \neq exec
+  \endprooftree
+  \\[2em]
+\end{gather*}
+con
+\begin{itemize}
+  \item R1 $=$ B-WHILE.GOTO.PENDING
+  \item R2 $=$ B-WHILE.GOTO.FOUND
+\end{itemize}
+
+\end{description}
+

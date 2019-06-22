@@ -6,6 +6,8 @@
 \newcommand*{\divrg}{\mathord{\uparrow}}
 %% configurazioni della semantica <skip, s>
 \newcommand*{\config}[2]{\langle\ #1,\ #2\ \rangle}
+%% configurazioni della semantica <skip, s, flag>
+\newcommand*{\configG}[3]{\langle\ #1,\ #2,\ #3\ \rangle}
 %% configurazione della semantica denotazionale C[com](s)
 \newcommand*{\denotC}[2]{\calC \llbracket #1 \rrbracket (#2)}
 \newcommand*{\denotE}[2]{\calE \llbracket #1 \rrbracket (#2)}
@@ -30,6 +32,10 @@
 \newcommand*{\while}[2]{\kw{while} #1 \kw{do} #2}
 % macro per repeat C until B
 \newcommand*{\repeatuntil}[2]{\kw{repeat} #1 \kw{until} #2}
+% macro per l:C
+\newcommand*{\lab}[2]{#1: #2}
+% macro per goto l
+\newcommand*{\goto}[1]{\kw{goto}\ #1}
 % macro per $ecc
 \newcommand*{\ecc}{\mathrm{\$ecc}}
 % macro per operatore di anullamento var /
@@ -71,6 +77,7 @@
 \newcommand*{\Com}{\mathrm{Com}}
 \newcommand*{\Exp}{\mathrm{Exp}}
 \newcommand*{\ST}{\mathrm{ST}}
+\newcommand*{\Label}{\mathrm{Label}}
 
 %% Sets of configurations
 \newcommand*{\NTe}{\Gamma_\mathrm{e}}
