@@ -32,10 +32,6 @@
 \newcommand*{\while}[2]{\kw{while} #1 \kw{do} #2}
 % macro per repeat C until B
 \newcommand*{\repeatuntil}[2]{\kw{repeat} #1 \kw{until} #2}
-% macro per l:C
-\newcommand*{\lab}[2]{#1: #2}
-% macro per goto l
-\newcommand*{\goto}[1]{\kw{goto}\ #1}
 % macro per $ecc
 \newcommand*{\ecc}{\mathrm{\$ecc}}
 % macro per operatore di anullamento var /
@@ -46,6 +42,15 @@
 \newcommand*{\cond}{\mathrm{cond}}
 % per funzione seq
 \newcommand*{\seq}{\mathrm{seq}}
+%% Luca Parolari
+% macro per l:C (sintassi)
+\newcommand*{\lab}[2]{#1: #2}
+% macro per goto l (sintassi)
+\newcommand*{\goto}[1]{\kw{goto}\ #1}
+% macro per goto l (flag)
+\newcommand*{\fgoto}[1]{\textit{goto}\ #1}
+% macro per exec (flag)
+\newcommand*{\fexec}{\textit{exec}}
 
 % Comando per scrivere con texttt dentro una formula matematica
 \newcommand{\mactext}[1]{\text{\texttt{#1}}}
@@ -484,3 +489,5 @@
 \newtheorem{proposizione}{Proposizione}
 \newtheorem{lemma}{Lemma}
 \newtheorem{esercizio}{Esercizio}
+
+

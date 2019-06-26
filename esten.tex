@@ -440,15 +440,15 @@ Aggiungere al linguaggio WHILE il goto.
 \begin{gather*}
   \rulename{B-LABEL.FOUND}
   \prooftree
-    \configG{C}{s}{exec} \Downarrow \config{s'}{f}
+    \configG{C}{s}{\fexec} \Downarrow \config{s'}{f}
     \justifies \configG{\lab{l}{C}}{s}{\goto{l}} \Downarrow \config{s'}{f}
   \endprooftree
   \\[2em]
-  \rulename{B-LAB.FLAG}
+  \rulename{B-LABEL.FLAG}
   \prooftree
     \configG{C}{s}{f} \Downarrow \config{s'}{f'}
     \justifies \configG{\lab{l}{C}}{s}{f} \Downarrow \config{s'}{f'}
-    \using f \neq \goto{l}
+    \using f \neq \fgoto{l}
   \endprooftree
 \end{gather*}
 
@@ -456,19 +456,19 @@ Aggiungere al linguaggio WHILE il goto.
 \begin{gather*}
   \rulename{B-GOTO.ENABLE}
   \prooftree
-    \justifies \configG{\goto{l}}{s}{exec} \Downarrow \config{s'}{\goto{l}}
+    \justifies \configG{\goto{l}}{s}{\fexec} \Downarrow \config{s'}{\fgoto{l}}
   \endprooftree
   \\[2em]
   \rulename{B-GOTO.FLAG}
   \prooftree
     \justifies \configG{\goto{l}}{s}{f} \Downarrow \config{s'}{f}
-    \using f \neq exec
+    \using f \neq \fexec
   \endprooftree  
 \end{gather*}
 
 \item[Skip]
 \begin{gather*}
-  \rulename{B-SKIP-FLAG}  
+  \rulename{B-SKIP.FLAG}  
   \prooftree
     \justifies
       \configG{\kw{skip}}{s}{f} \Downarrow \config{s}{f}
@@ -481,14 +481,14 @@ Aggiungere al linguaggio WHILE il goto.
   \prooftree
     \config{E}{s} \Downarrow \config{n}{s'}
     \justifies
-      \configG{x:=E}{s}{exec} \Downarrow \config{\assign{s'}{x}{n}}{exec}
+      \configG{x:=E}{s}{\fexec} \Downarrow \config{\assign{s'}{x}{n}}{\fexec}
   \endprooftree
   \\[2em]
   \rulename{B-ASSIGN.FLAG}  
   \prooftree
     \justifies
       \configG{x:=E}{s}{f} \Downarrow \config{s}{f}
-    \using f \neq exec
+    \using f \neq \fexec
   \endprooftree
 \end{gather*}
 
@@ -510,41 +510,44 @@ Aggiungere al linguaggio WHILE il goto.
   \prooftree
     \config{B}{s} \Downarrow \config{\textrm{tt}}{s'}
       \quad 
-      \configG{C_1}{s'}{exec} \Downarrow \config{s''}{exec}
+      \configG{C_1}{s'}{\fexec} \Downarrow \config{s''}{\fexec}
     \justifies
-      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{exec} \Downarrow \config{s''}{exec}
+      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{\fexec} \Downarrow \config{s''}{\fexec}
   \endprooftree
   \\[2em]
   \rulename{B-ITE.TRUE.FLAG}
   \prooftree
     \config{B}{s} \Downarrow \config{\textrm{tt}}{s'}
       \quad 
-      T1
+      A1
       \quad
-      T2
+      A2
     \justifies
-      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{exec} \Downarrow \config{s'''}{f'}
-    \using f \neq exec
+      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{\fexec} \Downarrow \config{s'''}{f'}
+    \using f \neq \fexec
   \endprooftree
-  \\
-  T1 = \configG{C_1}{s'}{exec} \Downarrow \config{s''}{f}\\
-  T2 = \configG{C_2}{s''}{f} \Downarrow \config{s'''}{f'}
-  \\[2em]
+\end{gather*}
+con
+\begin{itemize}
+\item $A1 = \configG{C_1}{s'}{\fexec} \Downarrow \config{s''}{f}$
+\item $A2 = \configG{C_2}{s''}{f} \Downarrow \config{s'''}{f'}$
+\end{itemize}
+\begin{gather*}
   \rulename{B-ITE.FALSE.EXEC}
   \prooftree
     \config{B}{s} \Downarrow \config{\textrm{ff}}{s'}
       \quad 
-      \configG{C_2}{s'}{exec} \Downarrow \config{s''}{f}
+      \configG{C_2}{s'}{\fexec} \Downarrow \config{s''}{f}
     \justifies
-      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{exec} \Downarrow \config{s''}{f}
+      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{\fexec} \Downarrow \config{s''}{f}
   \endprooftree
   \\[2em]
-  \rulename{B-ITE.FALSE.FLAG}
+  \rulename{B-ITE.FLAG.THEN-EXEC}
   \prooftree
-      \configG{C_1}{s}{f} \Downarrow \config{s'}{exec}
+      \configG{C_1}{s}{f} \Downarrow \config{s'}{\fexec}
     \justifies
-      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{f} \Downarrow \config{s'}{exec}
-    \using f \neq exec
+      \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{f} \Downarrow \config{s'}{\fexec}
+    \using f \neq \fexec
   \endprooftree
   \\[2em]
   \rulename{B-ITE.FLAG}
@@ -554,38 +557,42 @@ Aggiungere al linguaggio WHILE il goto.
       \configG{C_2}{s'}{f'} \Downarrow \config{s''}{f''}
     \justifies
       \configG{\textrm{$\kw{if}$ $B$ $\kw{then}$ $C_1$ $\kw{else}$ $C_2$}}{s}{f} \Downarrow \config{s''}{f''}
-    \using f \neq exec \land f' \neq exec
+    \using f \neq \fexec \land f' \neq \fexec
   \endprooftree
 \end{gather*}
+
 
 \item[While]
 \begin{gather*}
   \rulename{B-WHILE.TRUE.EXEC}
   \prooftree
     \config{B}{s} \Downarrow \config{\textrm{tt}}{s'}
-      \quad T1
-      \quad T2
+      \quad A1
+      \quad A2
     \justifies
-        \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{exec} \Downarrow \config{s'''}{f}
+        \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{\fexec} \Downarrow \config{s'''}{f}
   \endprooftree
-  \\
-  T1 = \configG{C}{s'}{exec} \Downarrow \config{s''}{exec} \\
-  T2 = \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s''}{exec} \Downarrow \config{s'''}{f}
-  \\[2em]
+\end{gather*}
+con 
+\begin{itemize}
+\item $A1 = \configG{C}{s'}{\fexec} \Downarrow \config{s''}{\fexec}$
+\item $A2 = \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s''}{\fexec} \Downarrow \config{s'''}{f}$ 
+\end{itemize}
+\begin{gather*}
   \rulename{B-WHILE.TRUE.FLAG}
   \prooftree
     \config{B}{s} \Downarrow \config{\textrm{tt}}{s'}
-      \quad \configG{C}{s'}{exec} \Downarrow \config{s''}{f}
+      \quad \configG{C}{s'}{\fexec} \Downarrow \config{s''}{f}
     \justifies
-      \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{exec} \Downarrow \config{s''}{f}
-    \using f \neq exec
+      \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{\fexec} \Downarrow \config{s''}{f}
+    \using f \neq \fexec
   \endprooftree
   \\[2em]
   \rulename{B-WHILE.FALSE.EXEC}
   \prooftree
     \config{B}{s} \Downarrow \config{\textrm{ff}}{s'}
     \justifies
-      \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{exec} \Downarrow \config{s'}{exec}
+      \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{\fexec} \Downarrow \config{s'}{\fexec}
   \endprooftree
   \\[2em]
   \rulename{R1}
@@ -593,18 +600,17 @@ Aggiungere al linguaggio WHILE il goto.
     \configG{C}{s}{f} \Downarrow \config{s'}{f'}
     \justifies
     \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{f} \Downarrow \config{s'}{f'}
-    \using f \neq exec \land f' \neq exec
+    \using f \neq \fexec \land f' \neq \fexec
   \endprooftree
   \\[2em]
   \rulename{R2}
   \prooftree
-    \configG{C}{s}{f} \Downarrow \config{s'}{exec}
-      \quad \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s'}{exec} \Downarrow \config{s''}{f'}
+    \configG{C}{s}{f} \Downarrow \config{s'}{\fexec}
+      \quad \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s'}{\fexec} \Downarrow \config{s''}{f'}
     \justifies
       \configG{\textrm{$\kw{while}$ $B$ $\kw{do}$ $C$}}{s}{f} \Downarrow \config{s''}{f'}
-    \using f \neq exec
+    \using f \neq \fexec
   \endprooftree
-  \\[2em]
 \end{gather*}
 con
 \begin{itemize}
